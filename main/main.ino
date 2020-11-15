@@ -6,8 +6,8 @@ Adafruit_ADS1115 ads1115(0x48);
 ///////////////////////////////HUMIDITY
 const int humidityReadPort = 0;
 
-const int humidityAirValue = 29000;  // Medimos valor en seco
-const int humidityWaterValue = 15600 ;  // Medimos valor en agua
+const int humidityAirValue = 30000;  // Medimos valor en seco
+const int humidityWaterValue = 16825 ;  // Medimos valor en agua
 
 ///////////////////////////////SALINITY
 const int salinityReadPort = 1;
@@ -27,17 +27,21 @@ void setup() {
 }
 
 void loop() {
+  int vHumidityPort, vSalinityPort;
+  
   delay(1600);
-  Serial.print(measureHumidity());
+  Serial.print(measureHumidity(vHumidityPort));  
   Serial.print(";");
+  Serial.print(vHumidityPort);
+  Serial.print("/");
   delay(100);
-  Serial.print(measureSalinity(), 2);
-  delay(100);
+  Serial.print(measureSalinity(vSalinityPort), 2);
   Serial.print(";");
-
+  Serial.print(vSalinityPort);
+  Serial.println("");
 }
 
-int measureHumidity() {
+int measureHumidity(int &vHumidityPort) {
   int16_t val = ads1115.readADC_SingleEnded(humidityReadPort);
   int humidity;
   if (val >= humidityAirValue) {
@@ -45,11 +49,11 @@ int measureHumidity() {
   } else {
     humidity = 100 * humidityAirValue / (humidityAirValue - humidityWaterValue) - val * 100 / (humidityAirValue - humidityWaterValue);
   }
-
+  vHumidityPort = val;
   return humidity;
 }
 
-float measureSalinity() {
+float measureSalinity(int &vSalinityPort) {
   digitalWrite(salinityPowerPort, HIGH); // Turn on the sensor
   delay(1500);
   int16_t val = ads1115.readADC_SingleEnded(salinityReadPort);
@@ -59,6 +63,6 @@ float measureSalinity() {
   if (val > salinityWaterValue) {
     r = (float)((val - salinityWaterValue) * 9.553) / 1000;
   }
-  
+  vSalinityPort = val;
   return r;
 }
