@@ -46,11 +46,12 @@ void loop() {
 //Funcion para calcular y devolver el porcentaje de la Humedad, numero entero
 int measureHumidity(int &vHumidityPort) {
   int16_t val = ads1115.readADC_SingleEnded(humidityReadPort); //Lectura analogica del sensor
-  int humidity;
-  if (val >= humidityAirValue) {
-    humidity = 0;
-  } else {
+  int humidity = 0;
+  if (val < humidityAirValue) {
     humidity = 100 * humidityAirValue / (humidityAirValue - humidityWaterValue) - val * 100 / (humidityAirValue - humidityWaterValue); //Formula usada para calcular el porcentaje segun el valor leido
+    if(humidity > 100){
+      humidity = 100;
+    }
   }
   //Se guarda en la variable definida en el loop() (vHumidityPort) el valor de lectura para casos de Debug
   vHumidityPort = val;
@@ -67,8 +68,12 @@ float measureSalinity(int &vSalinityPort) {
   
   float r = 0;
   if (val > salinityWaterValue) {
-    r = (float)((val - salinityWaterValue) * 9.553) / 1000; //Formula usada para calcular el porcentaje segun el valor leido
+    r = (float)((val - salinityWaterValue) * 25.64) / 1000; //Formula usada para calcular el porcentaje segun el valor leido
+    if(r > 100){
+      r = 100;
+    }
   }
+
   //Se guarda en la variable definida en el loop() (vSalinityPort) el valor de lectura para casos de Debug
   vSalinityPort = val;
   //Se devuelve el porcentaje
