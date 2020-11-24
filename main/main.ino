@@ -4,13 +4,10 @@
 Adafruit_ADS1115 ads1115(0x48);
 
 ///////////////////////////////HUMIDITY
-const int humidityReadPort = 0;   //Numero del puerto analogico donde va conectado el sensor de humedad
-
 const int humidityAirValue = 30000;  // Valor en seco -- Valor de Calibracion
 const int humidityWaterValue = 16825 ;  //Valor en agua -- Valor de Calibracion
 
 ///////////////////////////////SALINITY
-const int salinityReadPort = 1; //Numero del puerto analogico donde va conectado el sensor de salinidad
 const int salinityPowerPort = 5; //Numero del puerto donde va conectado el puerto de energia (D5)
 
 const int salinityWaterValue = 22300; //Valor en agua sin sal, (VAire = 135) -- Valor de Calibracion
@@ -32,19 +29,19 @@ void loop() {
   //Imprime los datos por consola con un formato personalizado: pHumedad;vHumedad/pSalinidad;vHumedad  // p = porcentaje, v = valor de lectura del sensor (puerto analogico)
   //Hecho para poder recoger los datos con un formato especifico para ser leidos en la aplicacion grafica
   delay(1600);
-  Serial.print(measureHumidity(vHumidityPort));  
+  Serial.print(measureHumidity(vHumidityPort,0));  
   Serial.print(";");
   Serial.print(vHumidityPort);
   Serial.print("/");
   delay(100);
-  Serial.print(measureSalinity(vSalinityPort), 2);
+  Serial.print(measureSalinity(vSalinityPort,1), 2);
   Serial.print(";");
   Serial.print(vSalinityPort);
   Serial.println("");
 }
 
 //Funcion para calcular y devolver el porcentaje de la Humedad, numero entero
-int measureHumidity(int &vHumidityPort) {
+int measureHumidity(int &vHumidityPort, int humidityReadPort) {
   int16_t val = ads1115.readADC_SingleEnded(humidityReadPort); //Lectura analogica del sensor
   int humidity = 0;
   if (val < humidityAirValue) {
@@ -60,7 +57,7 @@ int measureHumidity(int &vHumidityPort) {
 }
 
 //Funcion para calcular y devolver el porcentaje de la Humedad, con dos decimales
-float measureSalinity(int &vSalinityPort) {
+float measureSalinity(int &vSalinityPort, int salinityReadPort) {
   digitalWrite(salinityPowerPort, HIGH); // Se activa el sensor para enviar una carga electrica
   delay(1500); // Espera de 1.5s
   int16_t val = ads1115.readADC_SingleEnded(salinityReadPort); //Se lee el valor leido del sensor
