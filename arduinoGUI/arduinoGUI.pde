@@ -14,13 +14,12 @@ boolean debug = false;
 void setup() {
   try {
     arduinoConsole = new Serial(this, "COM3", 9600);
-  }
-  catch(RuntimeException e) {
+  }catch(RuntimeException e) {
     print("Can't connect with Arduino Board (Serial)");
     System.exit(0);
   }
 
-  size(650, 300);
+  size(1000, 400);
   bg = loadImage("/res/bg.jpg");
   val1 = "";
   val2 = "";
@@ -30,7 +29,7 @@ void setup() {
 
   cp5 = new ControlP5(this);
   cp5.addButton("DEBUG")
-    .setPosition(560, 250)
+    .setPosition(900, 350)
     .setSize(80, 40)
     .setColorBackground(color( 130, 161, 82 ))
     .onPress(new CallbackListener() {
@@ -67,13 +66,16 @@ void draw() {
   fill(255, 255, 255);
   textFont(createFont("Bahnschrift", 64));
   text(val2, 100, 125);
-  delay(150);
+  delay(200);
   text(val1, 430, 125);
+  delay(200);
+  text(val3, 825, 125);
 
   if (debug) {
     textFont(createFont("Bahnschrift", 16));
     text(val2V, 80, 160);
     text(val1V, 455, 160);
+    text(val3V, 818, 160);
   }
   
   runDataThread();
@@ -87,7 +89,9 @@ void showData(String[] data, int n) {
     String[] extra = data[n-1].split(";");
     val = extra[0];
     if (debug) {
-      valLect = "aRead: " + extra[1];
+      if(extra.length > 1 && extra[1] != null){
+        valLect = "aRead: " + extra[1];
+      }
     }
   } else {
     return;
@@ -97,7 +101,6 @@ void showData(String[] data, int n) {
   case 1:
     val1V = valLect;
     val1 = val;
-    println("aaa");
     break;
   case 2:
     val2V = valLect;
@@ -109,7 +112,6 @@ void showData(String[] data, int n) {
     break;
   }
 }
-
 
 String[] readData() {
   String readData = arduinoConsole.readString();

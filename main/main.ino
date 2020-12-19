@@ -88,3 +88,5 @@ int measureTemperature(int &vTemperaturePort, int temperatureReadPort) {
   return temperature;
   //Retorna la temperatura
 }
+
+////////////////////////Funcion para calcular y devolver el Nivel de Luz/////////////////////////////////////////////////////////////////////////////
