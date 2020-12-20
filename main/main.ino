@@ -38,7 +38,7 @@ void loop() {
   Serial.print(vTemperaturePort);
   Serial.print("/");
   
-  Serial.print(measureLuminity(vLuminityPort, 2));
+  Serial.print(measureLuminity(vLuminityPort,2 ));
   Serial.print(";");
   Serial.print(vLuminityPort);
   Serial.println("");
@@ -98,18 +98,22 @@ int measureTemperature(int &vTemperaturePort, int temperatureReadPort) {
 int measureLuminity( int &vLuminityPort, int luminityReadPort ){
   int16_t val = ads1115.readADC_SingleEnded(luminityReadPort); //Valor leido del sensor de iluminación
   vLuminityPort = val;
-
+ 
  //Si el valor leido por el sensor es menor de 50 muestra en pantalla que es de noche
-   if(val<=90){ 
-    Serial.print("Noche");
+   if(val<=50){ 
+    //Serial.print("Noche");
+    return 0;
   }
   //Si el valor leido por el sensor se encuentra entre 50 y 150  muestra en pantalla que esta nublado
-  else if  (val>=90 && val<=150){
-    Serial.print("Nublado");
+  else if  (val>=50 && val<=150){
+    //Serial.print("Nublado");
+    return 1;
   }
   //Si el valor leido por el sensor es mayor de 150  muestra en pantalla que esta soleado
   else {
-    Serial.print ("Soleado");
+    //Serial.print ("Soleado");
+    return 2;
+
   }
    
 }
