@@ -5,9 +5,9 @@ Serial arduinoConsole;
 ControlP5 cp5;
 
 PFont font;
-PImage bg;
+PImage bg, bgNoche, bgNublado;
 
-String val1, val2, val3, val1V, val2V, val3V;
+String val1, val2, val3, val1V, val2V, val3V, val4, val4V;
 
 boolean debug = false;
 
@@ -19,17 +19,20 @@ void setup() {
     System.exit(0);
   }
 
-  size(1000, 400);
+  size(1000, 600);
   bg = loadImage("/res/bg.jpg");
+  bgNoche = loadImage("/res/bg1.jpg");
+  bgNublado = loadImage("/res/bg2.jpg");
   val1 = "";
   val2 = "";
   val3 = "";
+  val4 = "";
 
   surface.setTitle("LeafTech Demo");
 
   cp5 = new ControlP5(this);
   cp5.addButton("DEBUG")
-    .setPosition(900, 350)
+    .setPosition(900, 550)
     .setSize(80, 40)
     .setColorBackground(color( 130, 161, 82 ))
     .onPress(new CallbackListener() {
@@ -53,29 +56,49 @@ void runDataThread(){
         showData(data, 1);
         showData(data, 2);
         showData(data, 3);
+        showData(data, 4);
       }
      }
     }
-  }).start();
-  
+  }).start(); 
 }
   
 void draw() { 
-  background(bg);
-
+  if(!val4.isEmpty()){
+    try{
+      int val4F = Integer.parseInt(val4);
+      val4 = "Soleado";
+      background(bg);
+      if(val4F == 0){
+        background(bgNoche);
+        val4 = "Noche";
+      }else if(val4F == 1){
+        background(bgNublado);
+        val4 = "Nublado";
+      }
+    }catch(NumberFormatException e){}
+  }else{
+    background(bg);
+  }
+  
   fill(255, 255, 255);
-  textFont(createFont("Bahnschrift", 64));
-  text(val2, 100, 125);
+  textFont(createFont("Bahnschrift", 54));
+  text(val2, 140, 315);
   delay(200);
-  text(val1, 430, 125);
+  text(val1, 750, 315);
   delay(200);
-  text(val3, 825, 125);
-
+  text(val3, 120, 125);
+  delay(400);
+  if(val4.length() > 2){
+    text(val4, 735, 120);
+  }
+    
   if (debug) {
     textFont(createFont("Bahnschrift", 16));
-    text(val2V, 80, 160);
-    text(val1V, 455, 160);
-    text(val3V, 818, 160);
+    text(val2V, 120, 340);
+    text(val1V, 780, 340);
+    text(val3V, 120, 150);
+    text(val4V, 780, 140); 
   }
   
   runDataThread();
@@ -109,6 +132,10 @@ void showData(String[] data, int n) {
   case 3:
     val3V = valLect;
     val3 = val;
+    break;
+  case 4:
+    val4 = val;
+    val4V = valLect;
     break;
   }
 }
