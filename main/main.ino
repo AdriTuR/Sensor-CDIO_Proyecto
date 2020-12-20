@@ -18,9 +18,9 @@ void setup() {
 }
 
 void loop() {
-  int vHumidityPort, vSalinityPort, vTemperaturePort;
+  int vHumidityPort, vSalinityPort, vTemperaturePort, vLuminityPort;
 
-  //Imprime los datos por consola con un formato personalizado: pHumedad;vHumedad/pSalinidad;vHumedad/pTemperatura;vTemperatura
+  //Imprime los datos por consola con un formato personalizado: pHumedad;vHumedad/pSalinidad;vHumedad/pTemperatura;vTemperatura/Iluminación;vIluminación;
   // p = porcentaje, v = valor de lectura del sensor (puerto analogico)
   //Hecho para poder recoger los datos con un formato especifico para ser leidos en la aplicacion grafica
   Serial.print(measureSalinity(vSalinityPort, 1, 5), 2);
@@ -36,6 +36,11 @@ void loop() {
   Serial.print(measureTemperature(vTemperaturePort, 3));
   Serial.print(";");
   Serial.print(vTemperaturePort);
+  Serial.print("/");
+  
+  Serial.print(measureLuminity(vLuminityPort, 2));
+  Serial.print(";");
+  Serial.print(vLuminityPort);
   Serial.println("");
  
 }
@@ -80,7 +85,7 @@ float measureSalinity(int &vSalinityPort, int salinityReadPort, int salinityPowe
 
 /////////////////////////Funcion para calcular y devolver la Temperatura en Celsius, con dos decimales////////////////////////////////////////////////
 int measureTemperature(int &vTemperaturePort, int temperatureReadPort) {
-  int16_t val = ads1115.readADC_SingleEnded(temperatureReadPort); //Se lee el valor leido del sensor
+  int16_t val = ads1115.readADC_SingleEnded(temperatureReadPort); //Valor leido del sensor de temperatura
   float Vo = (((float)val / 1000.0) / 8.0); //Fórmula para calcular el voltaje
   float temperature = (Vo - 0.79) / 0.034; //Fórmula para calcular la temperatura en base a Vo dandola en Celsius
   vTemperaturePort = val;
@@ -89,4 +94,22 @@ int measureTemperature(int &vTemperaturePort, int temperatureReadPort) {
   //Retorna la temperatura
 }
 
-////////////////////////Funcion para calcular y devolver el Nivel de Luz/////////////////////////////////////////////////////////////////////////////
+////////////////////////Funcion para la medida de iluminación/////////////////////////////////////////////////////////////////////////////////////////
+int measureLuminity( int &vLuminityPort, int luminityReadPort ){
+  int16_t val = ads1115.readADC_SingleEnded(luminityReadPort); //Valor leido del sensor de iluminación
+  vLuminityPort = val;
+
+ //Si el valor leido por el sensor es menor de 50 muestra en pantalla que es de noche
+   if(val<=90){ 
+    Serial.print("Noche");
+  }
+  //Si el valor leido por el sensor se encuentra entre 50 y 150  muestra en pantalla que esta nublado
+  else if  (val>=90 && val<=150){
+    Serial.print("Nublado");
+  }
+  //Si el valor leido por el sensor es mayor de 150  muestra en pantalla que esta soleado
+  else {
+    Serial.print ("Soleado");
+  }
+   
+}
