@@ -100,12 +100,12 @@ int measureLuminity( int &vLuminityPort, int luminityReadPort ){
   vLuminityPort = val;
  
  //Si el valor leido por el sensor es menor de 50 muestra en pantalla que es de noche
-   if(val<=90){ 
+   if(val<=110){ 
     
     return 0; //Asignamos el numero 0 para que en la interfaz grafica muestre de noche
   }
   //Si el valor leido por el sensor se encuentra entre 50 y 150  muestra en pantalla que esta nublado
-  else if  (val>=90 && val<=150){
+  else if  (val>=110 && val<=170){
   
     return 1; //Asignamos el numero 1 para que en la interfaz grafica muestre nublado
   }
