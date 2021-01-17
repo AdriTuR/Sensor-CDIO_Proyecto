@@ -1,14 +1,19 @@
 #include <Wire.h>
 #include <Adafruit_ADS1015.h>
 
+#include "SalinitySensor.h"
+#include "HumiditySensor.h"
+#include "TemperatureSensor.h"
+#include "LuminitySensor.h"
+#include "WifiManager.h"
+
 Adafruit_ADS1115 ads1115(0x48);
+WifiManager wifi;
 
-///////////////////////////////HUMIDITY//////////////////////////////////////////////////////////////////////////
-const int humidityAirValue = 30000;  // Valor en seco -- Valor de Calibracion
-const int humidityWaterValue = 16825 ;  //Valor en agua -- Valor de Calibracion
-
-///////////////////////////////SALINITY//////////////////////////////////////////////////////////////////////////
-const int salinityWaterValue = 8600; //Valor en agua sin sal, (VAire = 135) -- Valor de Calibracion
+SalinitySensor salinitySensor(ads1115, (unsigned) 1, (unsigned) 5, (unsigned) 8600);
+HumiditySensor humiditySensor(ads1115, (unsigned) 0, (unsigned) 30000, (unsigned) 16825);
+TemperatureSensor temperatureSensor(ads1115, (unsigned) 3);
+LuminitySensor luminitySensor(ads1115, (unsigned) 2);
 
 void setup() {
   Serial.begin(9600);
@@ -18,11 +23,39 @@ void setup() {
 }
 
 void loop() {
-  int vHumidityPort, vSalinityPort, vTemperaturePort, vLuminityPort;
+  salinitySensor.measureSalinity();
+  //Serial.println(salinitySensor.getVal());
+
+  humiditySensor.measureHumidity();
+  //Serial.println(humiditySensor.getVal());
+
+  temperatureSensor.measureTemperature();
+  //Serial.println(temperatureSensor.getVal());
+
+  luminitySensor.measureLuminity();
+  //Serial.println(luminitySensor.getVal());
+  
+  String data[4];
+  String dataName[4];
+  
+  dataName[0] = "Salinity";
+  data[0] = salinitySensor.getVal();
+  dataName[1] = "Humidity";
+  data[1] = humiditySensor.getVal();
+  dataName[2] = "Temperature";
+  data[2] = temperatureSensor.getVal();
+  dataName[3] = "Luminity";
+  data[3] = luminitySensor.getVal();
+  
+  wifi.sendDataToCloud(dataName, data, 4);
+
+  delay(3500);
+  
 
   //Imprime los datos por consola con un formato personalizado: pHumedad;vHumedad/pSalinidad;vHumedad/pTemperatura;vTemperatura/Iluminación;vIluminación;
   // p = porcentaje, v = valor de lectura del sensor (puerto analogico)
   //Hecho para poder recoger los datos con un formato especifico para ser leidos en la aplicacion grafica
+  /*
   Serial.print(measureSalinity(vSalinityPort, 1, 5), 2);
   Serial.print(";");
   Serial.print(vSalinityPort);
@@ -42,78 +75,6 @@ void loop() {
   Serial.print(";");
   Serial.print(vLuminityPort);
   Serial.println("");
+  */
  
-}
-
-////////////////////////Funcion para calcular y devolver el porcentaje de la Humedad, numero entero///////////////////////////////////////////
-int measureHumidity(int &vHumidityPort, int humidityReadPort) {
-  int16_t val = ads1115.readADC_SingleEnded(humidityReadPort); //Lectura analogica del sensor
-  int humidity = 0;
-  if (val < humidityAirValue) {
-    humidity = 100 * humidityAirValue / (humidityAirValue - humidityWaterValue) - val * 100 / (humidityAirValue - humidityWaterValue); //Formula usada para calcular el porcentaje segun el valor leido
-    if (humidity > 100) {
-      humidity = 100;
-    }
-  }
-  //Se guarda en la variable definida en el loop() (vHumidityPort) el valor de lectura para casos de Debug
-  vHumidityPort = val;
-  //Retorna el porcentaje
-  return humidity;
-}
-
-////////////////////////////////Funcion para calcular y devolver el porcentaje de la Salinidad, con dos decimales/////////////////////////////////
-float measureSalinity(int &vSalinityPort, int salinityReadPort, int salinityPowerPort) {
-  pinMode(salinityPowerPort, OUTPUT);
-  digitalWrite(salinityPowerPort, HIGH); // Se activa el sensor para enviar una carga electrica
-  delay(1500); // Espera de 1.5s
-  int16_t val = ads1115.readADC_SingleEnded(salinityReadPort); //Se lee el valor leido del sensor
-  digitalWrite(salinityPowerPort, LOW); // Se apaga el sensor tras leer la lectura
-
-  float r = 0;
-  if (val > salinityWaterValue) {
-    r = (float)((val - salinityWaterValue) * 25.64) / 1000; //Formula usada para calcular el porcentaje segun el valor leido
-    if (r > 100) {
-      r = 100;
-    }
-  }
-
-  //Se guarda en la variable definida en el loop() (vSalinityPort) el valor de lectura para casos de Debug
-  vSalinityPort = val;
-  //Se devuelve el porcentaje
-  return r;
-}
-
-/////////////////////////Funcion para calcular y devolver la Temperatura en Celsius, con dos decimales////////////////////////////////////////////////
-int measureTemperature(int &vTemperaturePort, int temperatureReadPort) {
-  int16_t val = ads1115.readADC_SingleEnded(temperatureReadPort); //Valor leido del sensor de temperatura
-  float Vo = (((float)val / 1000.0) / 8.0); //Fórmula para calcular el voltaje
-  float temperature = (Vo - 0.79) / 0.034; //Fórmula para calcular la temperatura en base a Vo dandola en Celsius
-  vTemperaturePort = val;
-  
-  return temperature;
-  //Retorna la temperatura
-}
-
-////////////////////////Funcion para la medida de iluminación/////////////////////////////////////////////////////////////////////////////////////////
-int measureLuminity( int &vLuminityPort, int luminityReadPort ){
-  int16_t val = ads1115.readADC_SingleEnded(luminityReadPort); //Valor leido del sensor de iluminación
-  vLuminityPort = val;
- 
- //Si el valor leido por el sensor es menor de 50 muestra en pantalla que es de noche
-   if(val<=110){ 
-    
-    return 0; //Asignamos el numero 0 para que en la interfaz grafica muestre de noche
-  }
-  //Si el valor leido por el sensor se encuentra entre 50 y 150  muestra en pantalla que esta nublado
-  else if  (val>=110 && val<=170){
-  
-    return 1; //Asignamos el numero 1 para que en la interfaz grafica muestre nublado
-  }
-  //Si el valor leido por el sensor es mayor de 150  muestra en pantalla que esta soleado
-  else {
-    
-    return 2; //Asignamos el numero 0 para que en la interfaz grafica muestre soleado
-
-  }
-   
 }
