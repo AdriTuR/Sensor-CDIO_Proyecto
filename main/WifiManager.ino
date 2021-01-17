@@ -8,8 +8,8 @@
 const char WiFiSSID[] = "GTI1";
 const char WiFiPSK[] = "1PV.arduino.Toledo";
 #else //Conexion fuera de la UPV
-const char WiFiSSID[] = "";
-const char WiFiPSK[] = "";
+const char WiFiSSID[] = "abcdef5";
+const char WiFiPSK[] = "aaaa1234";
 #endif
 
 #if defined(WiFi_CONNECTION_UPV) //Conexion UPV
@@ -28,11 +28,19 @@ WifiManager::WifiManager() {
 }
 
 void WifiManager::sendDataToCloud(String fieldName[], String data[], int nFields) {
-  if (!isWifiConnected()) {
+  if(!isWifiConnected()){
     connectWiFi();
-    delay(1500);
-    Serial.println("Wifi Off... Reconnecting...");
-  } else {
+    unsigned int tries = 0;
+    //Max. 7 veces para intentar conectarse a la wifi
+    while (!isWifiConnected()) {
+      if(tries >= 7){
+        return;
+      }
+      tries++;
+      Serial.println("Wifi Off... Reconnecting... (" + (String) tries + ")");
+      delay(8000);
+    }
+  }else{
     Serial.println("WiFi connected");
   }
   HTTPPost(fieldName, data, nFields);

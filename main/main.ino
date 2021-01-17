@@ -46,12 +46,15 @@ void loop() {
   data[2] = temperatureSensor.getVal();
   dataName[3] = "Luminity";
   data[3] = luminitySensor.getVal();
+
   
   wifi.sendDataToCloud(dataName, data, 4);
 
-  delay(3500);
+  delay(5000);
+  Serial.println("Sleeping...");
+  ESP.deepSleep(30 * 1000000);
   
-
+  
   //Imprime los datos por consola con un formato personalizado: pHumedad;vHumedad/pSalinidad;vHumedad/pTemperatura;vTemperatura/Iluminación;vIluminación;
   // p = porcentaje, v = valor de lectura del sensor (puerto analogico)
   //Hecho para poder recoger los datos con un formato especifico para ser leidos en la aplicacion grafica
