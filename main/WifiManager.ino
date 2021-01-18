@@ -1,15 +1,15 @@
 #include <ESP8266WiFi.h>
 #include "WifiManager.h"
 
-//#define WiFi_CONNECTION_UPV
+#define WiFi_CONNECTION_UPV
 #define REST_SERVER_DWEET
 
 #ifdef WiFi_CONNECTION_UPV //Conexion UPV
 const char WiFiSSID[] = "GTI1";
 const char WiFiPSK[] = "1PV.arduino.Toledo";
 #else //Conexion fuera de la UPV
-const char WiFiSSID[] = "abcdef5";
-const char WiFiPSK[] = "aaaa1234";
+const char WiFiSSID[] = "";//Nombre de la red Wi-Fi 
+const char WiFiPSK[] = "";//Contraseña de la red Wi-Fi
 #endif
 
 #if defined(WiFi_CONNECTION_UPV) //Conexion UPV
