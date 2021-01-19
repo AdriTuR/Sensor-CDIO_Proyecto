@@ -1,8 +1,15 @@
+// ------------------INFORMACIÓN---------------------------------------
+//
+// Fichero: TemperatureSensor.h
+// Autor: LeafTech
+// Fecha: 16/01/2021
+//
+// ---------------------------------------------------------------------
 #ifndef TEMPERATUREENSOR_H
 #define TEMPERATUREENSOR_H
-
+// ------------------BIBLIOTECAS----------------------------------------
 #include "Sensor.h"
-
+// ----------------CLASE TEMPERATURESENSOR------------------------------
 class TemperatureSensor: public Sensor {
   public:
     void measureTemperature();
@@ -11,5 +18,6 @@ class TemperatureSensor: public Sensor {
       analogReadPort = _readPort;
     }
 };
-
+// ---------------------------------------------------------------------
 #endif
+// ---------------------------------------------------------------------

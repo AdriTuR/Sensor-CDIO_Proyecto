@@ -1,8 +1,15 @@
+// ------------------INFORMACIÓN---------------------------------------
+//
+// Fichero: HumiditySensor.h
+// Autor: LeafTech
+// Fecha: 16/01/2021
+//
+// ---------------------------------------------------------------------
 #ifndef HUMIDITYSENSOR_H
 #define HUMIDITYSENSOR_H
-
+// ------------------BIBLIOTECAS----------------------------------------
 #include "Sensor.h"
-
+// ----------------CLASE HUMIDITYSENSOR---------------------------------
 class HumiditySensor: public Sensor {
   private:
     unsigned int humidityAirValue;
@@ -16,5 +23,6 @@ class HumiditySensor: public Sensor {
       humidityWaterValue = _humidityWaterValue;
     }
 };
-
+// ---------------------------------------------------------------------
 #endif
+// ---------------------------------------------------------------------

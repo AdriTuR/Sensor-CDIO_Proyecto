@@ -1,8 +1,15 @@
+// ------------------INFORMACIÓN---------------------------------------
+//
+// Fichero: SalinitySensor.h
+// Autor: LeafTech
+// Fecha: 16/01/2021
+//
+// ---------------------------------------------------------------------
 #ifndef SALINITYSENSOR_H
 #define SALINITYSENSOR_H
-
+// ------------------BIBLIOTECAS----------------------------------------
 #include "Sensor.h"
-
+// ----------------CLASE SALINITYSENSOR---------------------------------
 class SalinitySensor: public Sensor {
   private:
     unsigned int salinityWaterValue;
@@ -16,5 +23,6 @@ class SalinitySensor: public Sensor {
       pinMode(powerPort, OUTPUT);
      }
 };
-
+// ---------------------------------------------------------------------
 #endif
+// ---------------------------------------------------------------------

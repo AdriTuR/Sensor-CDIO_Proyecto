@@ -1,8 +1,14 @@
+// ------------------INFORMACIÓN---------------------------------------
+//
+// Fichero: WifiManager.ino
+// Autor: LeafTech
+// Fecha: 16/01/2021
+// ------------------BIBLIOTECAS----------------------------------------
 #include "SalinitySensor.h"
 #include "HumiditySensor.h"
 #include "TemperatureSensor.h"
 #include "LuminitySensor.h"
-
+// ---------------MEASURE SALINITY--------------------------------------
 void SalinitySensor::measureSalinity() {
   digitalWrite(powerPort, HIGH); // Se activa el sensor para enviar una carga electrica
   delay(1500); // Espera de 1.5s
@@ -22,7 +28,7 @@ void SalinitySensor::measureSalinity() {
   //Se devuelve el porcentaje
   finalValue = r;
 }
-
+// ------------------------MEASURE HUMIDITY-----------------------------
 void HumiditySensor:: measureHumidity() {
   int16_t val = board.readADC_SingleEnded(analogReadPort); //Lectura analogica del sensor
   int humidity = 0;
@@ -37,7 +43,7 @@ void HumiditySensor:: measureHumidity() {
   //Retorna el porcentaje
   finalValue = humidity;
 }
-
+// --------------------MEASURE TEMPERATURE--------------------------------
 void TemperatureSensor::measureTemperature() {
   int16_t val = board.readADC_SingleEnded(analogReadPort); //Valor leido del sensor de temperatura
   float Vo = (((float)val / 1000.0) / 8.0); //Fórmula para calcular el voltaje
@@ -47,7 +53,7 @@ void TemperatureSensor::measureTemperature() {
   finalValue = temperature;
   //Retorna la temperatura
 }
-
+// --------------------MEASURE LUMINIDTY--------------------------------
 void LuminitySensor::measureLuminity(){
   int16_t val = board.readADC_SingleEnded(analogReadPort); //Valor leido del sensor de iluminación
   readedValue = val;

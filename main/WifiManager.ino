@@ -1,17 +1,24 @@
+// ------------------INFORMACIÓN---------------------------------------
+//
+// Fichero: WifiManager.ino
+// Autor: LeafTech
+// Fecha: 16/01/2021
+//
+// ------------------BIBLIOTECAS----------------------------------------
 #include <ESP8266WiFi.h>
 #include "WifiManager.h"
-
-#define WiFi_CONNECTION_UPV
+// ---------------------------------------------------------------------
+//#define WiFi_CONNECTION_UPV
 #define REST_SERVER_DWEET
 
 #ifdef WiFi_CONNECTION_UPV //Conexion UPV
-const char WiFiSSID[] = "GTI1";
-const char WiFiPSK[] = "1PV.arduino.Toledo";
+const char WiFiSSID[] = "GTI1"; //Nombre de la red Wi-Fi 
+const char WiFiPSK[] = "1PV.arduino.Toledo"; //Contraseña de la red Wi-Fi
 #else //Conexion fuera de la UPV
-const char WiFiSSID[] = "";//Nombre de la red Wi-Fi 
-const char WiFiPSK[] = "";//Contraseña de la red Wi-Fi
+const char WiFiSSID[] = "abcdef5";//Nombre de la red Wi-Fi 
+const char WiFiPSK[] = "aaaa1234";//Contraseña de la red Wi-Fi
 #endif
-
+// ---------------------------------------------------------------------
 #if defined(WiFi_CONNECTION_UPV) //Conexion UPV
 const char Server_Host[] = "proxy.upv.es";
 const int Server_HttpPort = 8080;
@@ -19,14 +26,14 @@ const int Server_HttpPort = 8080;
 const char Server_Host[] = "dweet.io";
 const int Server_HttpPort = 80;
 #endif
-
+// ---------------------------------------------------------------------
 WiFiClient client;
 
 WifiManager::WifiManager() {
   connectWiFi();
   pinMode(4, OUTPUT);
 }
-
+// ---------------------------------------------------------------------
 void WifiManager::sendDataToCloud(String fieldName[], String data[], int nFields) {
   if(!isWifiConnected()){
     connectWiFi();
@@ -45,12 +52,12 @@ void WifiManager::sendDataToCloud(String fieldName[], String data[], int nFields
   }
   HTTPPost(fieldName, data, nFields);
 }
-
+// ---------------------------------------------------------------------
 void WifiManager::connectWiFi()
 {
   WiFi.begin(WiFiSSID, WiFiPSK);
 }
-
+// ---------------------------------------------------------------------
 bool WifiManager::isWifiConnected() {
   if (WiFi.status() == WL_CONNECTED) {
     digitalWrite(4, HIGH);
@@ -60,13 +67,13 @@ bool WifiManager::isWifiConnected() {
     return false;
   }
 }
-
+// ---------------------------------------------------------------------
 void WifiManager::blinkLedStatus() {
   digitalWrite(4, LOW);
   delay(100);
   digitalWrite(4, HIGH);
 }
-
+// ---------------------------------------------------------------------
 void WifiManager::HTTPPost(String fieldName[], String fieldData[], int numFields) {
   if (client.connect( Server_Host , Server_HttpPort )) {
     Serial.println("POST data to REST services");
@@ -103,3 +110,4 @@ void WifiManager::HTTPPost(String fieldName[], String fieldData[], int numFields
     Serial.println("Can't connect with REST services");
   }
 }
+// ---------------------------------------------------------------------

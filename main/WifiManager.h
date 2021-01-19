@@ -1,6 +1,13 @@
+// ------------------INFORMACIÓN---------------------------------------
+//
+// Fichero: WifiManager.h
+// Autor: LeafTech
+// Fecha: 16/01/2021
+//
+// ---------------------------------------------------------------------
 #ifndef WIFIMANAGER_H
 #define WIFIMANAGER_H
-
+// ----------------CLASE WIFIMANAGER------------------------------------
 class WifiManager{
   public:
     WifiManager();
@@ -11,5 +18,6 @@ class WifiManager{
     void blinkLedStatus();
     void HTTPPost(String fieldName[], String fieldData[], int numFields); 
 };
-
+// ---------------------------------------------------------------------
 #endif
+// ---------------------------------------------------------------------
