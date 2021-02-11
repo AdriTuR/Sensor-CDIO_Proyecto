@@ -15,8 +15,8 @@
 const char WiFiSSID[] = "GTI1"; //Nombre de la red Wi-Fi 
 const char WiFiPSK[] = "1PV.arduino.Toledo"; //Contraseña de la red Wi-Fi
 #else //Conexion fuera de la UPV
-const char WiFiSSID[] = "abcdef5";//Nombre de la red Wi-Fi 
-const char WiFiPSK[] = "aaaa1234";//Contraseña de la red Wi-Fi
+const char WiFiSSID[] = "dMx-AP2";//Nombre de la red Wi-Fi 
+const char WiFiPSK[] = "L4nXmD3tN2";//Contraseña de la red Wi-Fi
 #endif
 // ---------------------------------------------------------------------
 #if defined(WiFi_CONNECTION_UPV) //Conexion UPV

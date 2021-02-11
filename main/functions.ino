@@ -59,19 +59,19 @@ void LuminitySensor::measureLuminity(){
   readedValue = val;
  
  //Si el valor leido por el sensor es menor de 50 muestra en pantalla que es de noche
-   if(val<=110){ 
+   if(val>15540){ 
     
     finalValue = 0; //Asignamos el numero 0 para que en la interfaz grafica muestre de noche
   }
   //Si el valor leido por el sensor se encuentra entre 50 y 150  muestra en pantalla que esta nublado
-  else if  (val>=110 && val<=170){
+  else if  (val<=15540 && val<=15480){
   
     finalValue = 1; //Asignamos el numero 1 para que en la interfaz grafica muestre nublado
   }
   //Si el valor leido por el sensor es mayor de 150  muestra en pantalla que esta soleado
   else {
     
-    finalValue = 2; //Asignamos el numero 0 para que en la interfaz grafica muestre soleado
+    finalValue = 2; //Asignamos el numero 1 para que en la interfaz grafica muestre soleado
 
   }
    

@@ -26,22 +26,22 @@ void setup() {
 }
 // ---------------------LOOP------------------------------------------
 void loop() {
-  SalinitySensor salinitySensor(ads1115, (unsigned) 1, (unsigned) 5, (unsigned) 8600);
-  HumiditySensor humiditySensor(ads1115, (unsigned) 0, (unsigned) 30000, (unsigned) 16825);
-  TemperatureSensor temperatureSensor(ads1115, (unsigned) 3);
-  LuminitySensor luminitySensor(ads1115, (unsigned) 2);
+  SalinitySensor salinitySensor(ads1115, (unsigned) 0, (unsigned) 5, (unsigned) 13500);
+  HumiditySensor humiditySensor(ads1115, (unsigned) 2, (unsigned) 30000, (unsigned) 16825);
+  TemperatureSensor temperatureSensor(ads1115, (unsigned) 1);
+  LuminitySensor luminitySensor(ads1115, (unsigned) 3);
   
   salinitySensor.measureSalinity();
-  //Serial.println(salinitySensor.getVal());
-
+  Serial.println(salinitySensor.getVal());
+  delay (300);
   humiditySensor.measureHumidity();
-  //Serial.println(humiditySensor.getVal());
+  Serial.println(humiditySensor.getVal());
 
   temperatureSensor.measureTemperature();
-  //Serial.println(temperatureSensor.getVal());
+  Serial.println(temperatureSensor.getVal());
 
   luminitySensor.measureLuminity();
-  //Serial.println(luminitySensor.getVal());
+  Serial.println(luminitySensor.getVal());
 
 // -----------------VALORES DE LA SONDA------------------------------
   String data[4];
