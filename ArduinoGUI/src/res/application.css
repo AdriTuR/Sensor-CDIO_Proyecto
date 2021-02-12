@@ -1,0 +1,22 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root{
+	-fx-background-image: url("/res/bg.png");
+}
+
+.day{
+	-fx-background-image: url("/res/bg.png");
+}
+
+.cloudly{
+	-fx-background-image: url("/res/bg1.jpg");
+}
+
+.night{
+	-fx-background-image: url("/res/bg2.jpg");
+}
+
+.text-color{
+	-fx-fill: #419b2d;
+	-fx-font-weight: bold;
+}
